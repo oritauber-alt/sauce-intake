@@ -13,7 +13,7 @@
 3. הדבק את השורה הזאת ולחץ Enter:
 
 ```
-Fetch https://raw.githubusercontent.com/oritauber-alt/sauce-intake/main/PROMPT.md and follow it exactly.
+Download https://raw.githubusercontent.com/oritauber-alt/sauce-intake/main/PROMPT.md with curl into a temp file, read that file, and follow it exactly.
 ```
 
 אם הסוכן שלך לא מצליח לקרוא כתובת מהאינטרנט, אפשר גם כך:

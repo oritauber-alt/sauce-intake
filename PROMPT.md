@@ -7,7 +7,8 @@ Do not skip ahead. Do not improvise steps that are not written here.
 
 You are collecting information about this product for a content team (Sauce). You change nothing.
 
-Allowed writes: only inside a new folder `./sauce-intake/` at the project root. Create it first, empty.
+Allowed writes: only inside a new folder `./sauce-intake/` at the project root. Create it first, with
+an empty file `PROOF-no-changes.txt` inside it (git does not list an empty folder).
 
 Two things are also allowed, because they are reads in effect: running the project's own dev script
 for the screenshots (part 5), which may write into its own ignored cache folders such as
@@ -32,8 +33,8 @@ If a step needs any of these, skip that step and write in `REPORT.md` which step
 
 ## 2. Proof of no changes
 
-Right after creating the empty folder, run these two commands and save their exact output to
-`sauce-intake/PROOF-no-changes.txt` under the heading `BEFORE`:
+Right after creating the folder and the empty file, run these two commands and save their exact
+output to `sauce-intake/PROOF-no-changes.txt` under the heading `BEFORE`:
 
 ```
 git status --porcelain
@@ -41,7 +42,7 @@ git stash list
 ```
 
 At the very end (part 7) run them again and append the output under the heading `AFTER`.
-BEFORE already holds the line `?? sauce-intake/`, because the folder exists. AFTER must be identical
+BEFORE already holds the line `?? sauce-intake/`, because the folder has a file in it. AFTER must be identical
 to BEFORE, line for line. If anything differs, say so plainly in `REPORT.md` and in the chat.
 
 If this folder is not a git repository, write `Not a git repository, proof skipped.` in the file
@@ -49,7 +50,8 @@ and continue.
 
 ## 3. Read the repo (read-only)
 
-Read, do not run. Look for:
+Read, do not run. Skip `node_modules/`, build output (`dist/`, `build/`, `.next/`, `out/`), caches,
+and any git worktrees (`.claude/worktrees/`, `.worktrees/`): they repeat the code. Look for:
 
 - `README*` and any docs folder: what the product is and who it is for.
 - Landing or marketing pages, the pricing page, the onboarding screens.
