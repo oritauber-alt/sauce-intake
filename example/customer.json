@@ -1,0 +1,45 @@
+{
+  "name": "Nestboard",
+  "website": "https://nestboard.example",
+  "whatItDoes": "A shared board where a household keeps its chores, bills and groceries in one place: who does which chore this week, which bill is due and who pays it, and what is on the shopping list.",
+  "audience": "Couples, families and housemates who run one home together and split its chores, bills and shopping between them.",
+  "problem": "The running of the home lives in one person's head and in a scatter of notes, group chats and reminders, so chores are forgotten, bills are paid late and the same person ends up carrying it all.",
+  "differentiation": "One board for the whole household: every chore, bill and grocery item has an owner and a date that everyone in the home sees.",
+  "alternatives": "A paper chore chart on the fridge, the family group chat, a shared calendar, sticky notes, or one person who remembers everything.",
+  "proof": "No result, review, user count or number of the product exists. One fact the customer supplies for its content: washing twelve place settings of dishes by hand took 103 litres of water on average across 113 people in seven European countries, against about 15 litres for a full load in a modern dishwasher. Source: Stamminger and others, University of Bonn, A European Comparison of Cleaning Dishes by Hand, 2003.",
+  "pricing": "Not set. The customer is invented for a test.",
+  "desiredAction": "Follow the account.",
+  "voice": "Warm, plain and a little dry, like one housemate talking to another. It never preaches and never blames.",
+  "constraints": "TEST CUSTOMER, INVENTED ON 2026-10-04. Nestboard is not a real company. It has no real users, results, reviews, prices, website or logo: claim none of them. The website address is a reserved placeholder. Its brand colour, teal, was chosen for the test. Its mark (a flat teal house with a white tick) is a stand-in drawn for the test, not a real logo.",
+  "purpose": "reach",
+  "customer": {
+    "colours": [
+      { "hex": "#0F8F86", "name": "teal", "role": "primary, the fill of the mark and the main buttons" },
+      { "hex": "#FFFFFF", "name": "white", "role": "the tick on the mark and the page background" }
+    ],
+    "brandFile": "brand/nestboard-mark.png",
+    "logos": [],
+    "fonts": []
+  },
+  "product": {
+    "features": [
+      { "name": "Chore board", "whatItDoes": "Lists this week's chores, each with one owner and a day, seen by everyone in the home.", "status": "works", "screenshot": "02-chore-board.png" },
+      { "name": "Bills", "whatItDoes": "Shows which bill is due next and who pays it; reminders are not sent yet.", "status": "partial", "screenshot": "03-bills.png" },
+      { "name": "Shared grocery list", "whatItDoes": "One shopping list the whole household adds to and ticks off in the shop.", "status": "planned", "screenshot": "" }
+    ],
+    "mainFlow": "A person creates a home, invites the others by link, and adds the first chores; the board then shows who does what this week.",
+    "screens": ["home", "chore board", "bills", "household settings"]
+  },
+  "funnel": {
+    "whatTheAudienceSearches": ["how to split chores with a partner", "chore chart for roommates", "who pays which bill in a shared flat"],
+    "objections": ["We already have a family group chat.", "Another app nobody in the house will open."],
+    "offer": "Not set. The customer is invented for a test.",
+    "freeThing": ""
+  },
+  "sources": [
+    { "fact": "What the product does, who it is for, the problem, the voice and the constraints.", "where": "invented by Sauce for a test, 2026-10-04" },
+    { "fact": "Hand washing twelve place settings took 103 litres of water on average, against about 15 litres for a modern dishwasher.", "where": "Stamminger and others, University of Bonn, A European Comparison of Cleaning Dishes by Hand, 2003" },
+    { "fact": "Brand colour teal #0F8F86 and the house mark with a white tick.", "where": "invented by Sauce for a test, 2026-10-04" },
+    { "fact": "The three features and their status.", "where": "invented by Sauce as an example, 2026-10-06" }
+  ]
+}
