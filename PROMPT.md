@@ -8,7 +8,7 @@ Do not skip ahead. Do not improvise steps that are not written here.
 You are collecting information about this product for a content team (Sauce). You change nothing.
 
 Allowed writes: only inside a new folder `./sauce-intake/` at the project root. Create it first, with
-an empty file `PROOF-no-changes.txt` inside it (git does not list an empty folder).
+an empty file `GIT-CHECK.txt` inside it (git does not list an empty folder).
 
 Two things are also allowed, because they are reads in effect: running the project's own dev script
 for the screenshots (part 5), which may write into its own ignored cache folders such as
@@ -31,21 +31,28 @@ Forbidden, with no exception:
 
 If a step needs any of these, skip that step and write in `REPORT.md` which step you skipped and why.
 
-## 2. Proof of no changes
+## 2. Git check, before and after
 
-Right after creating the folder and the empty file, run these two commands and save their exact
-output to `sauce-intake/PROOF-no-changes.txt` under the heading `BEFORE`:
+Right after creating the folder and the empty file, run these four commands and save their exact
+output to `sauce-intake/GIT-CHECK.txt` under the heading `BEFORE`:
 
 ```
 git status --porcelain
 git stash list
+git diff | shasum
+git ls-files --others --exclude-standard | grep -v "^sauce-intake/" | xargs shasum
 ```
 
+The third line fingerprints the content of every changed tracked file, the fourth every untracked
+file outside your folder, so a change inside an already-modified file shows up too.
+
 At the very end (part 7) run them again and append the output under the heading `AFTER`.
+This is a check, not a full proof: git does not watch ignored folders (caches, `node_modules/`).
+Say it that way to the founder.
 BEFORE already holds the line `?? sauce-intake/`, because the folder has a file in it. AFTER must be identical
 to BEFORE, line for line. If anything differs, say so plainly in `REPORT.md` and in the chat.
 
-If this folder is not a git repository, write `Not a git repository, proof skipped.` in the file
+If this folder is not a git repository, write `Not a git repository, check skipped.` in the file
 and continue.
 
 ## 3. Read the repo (read-only)
@@ -69,7 +76,7 @@ Keep a running list of every fact with the file path it came from. Every fact yo
 
 ## 4. Interview the founder
 
-Ask in the chat. At most 9 questions in total. Ask only for what the code could not tell you.
+Ask in the chat. At most 10 questions in total. Ask only for what the code could not tell you.
 Ask one question at a time and wait for the answer. Short answers are fine. Use these exact
 questions (the app's own wording), dropping any the code already answered:
 
@@ -80,12 +87,15 @@ questions (the app's own wording), dropping any the code already answered:
 5. What is the next step for an interested person? (Try the product, book a demo, join a waitlist, or visit a specific page.)
 6. How should your brand sound? (Examples help: direct and practical, friendly and witty, thoughtful and expert.)
 7. Anything we should know or avoid? (Brand colors, words to avoid, claims you cannot make, or sensitive topics.)
-8. What should your content do first: reach new people, become the helpful one, or turn interest into action?
+8. What is different about your approach? (Why would they pick you over what they do today? Be concrete.)
+9. What should your content do first: reach new people, become the helpful one, or turn interest into action?
 
-9. Which features work today, and what is not ready yet?
+10. Which features work today, and what is not ready yet?
 
-Always ask 8 and 9. Drop any of 1 to 7 the code already answered in full. Never ask more than 9.
-Questions 1 to 7 are the app's own onboarding wording; question 8 is its three purpose choices.
+Always ask 9 and 10. Drop any of 1 to 8 the code already answered in full. Never ask more than 10,
+except that a required field of `customer.json` still empty after the code and the chat is always
+asked for, cap or no cap. Questions 1 to 8 are the app's own onboarding wording; question 9 is
+its three purpose choices.
 
 ## 5. Screenshots
 
@@ -99,8 +109,9 @@ inside `sauce-intake/screenshots/`; a picture you only see in your own browser t
 a. Get the app running locally without changing anything: the local code is what the founder is
    building, the public site may be older. If a local server is already running, use it. Else,
    only if `node_modules` (or the equivalent) exists, and, when the project has a `.env.example`,
-   a matching `.env` or `.env.local` exists too (checked by name only), start it with its existing
-   dev script in the background. You may add a port flag to avoid a clash. Do not wait for the
+   a matching `.env` or `.env.local` exists too (checked by name only), read the dev script line in
+   the manifest first: if it does more than start a server (a migration, seeding, code generation,
+   a build step), do not run it and go to rung c. Else start it in the background. You may add a port flag to avoid a clash. Do not wait for the
    log, which may stay empty: request the page with `curl` every few seconds until it answers.
    Never install anything and never create an env file. If it cannot run this way, use the public
    URL only if the repo itself names one (README, package.json, a deploy config), else go to rung c.
@@ -119,7 +130,9 @@ b. Capture each screen with Playwright driving the Chrome that is already on thi
    saves his logged-in session, like a browser that stays signed in; it lives outside the project
    and is never copied into `sauce-intake/`. Then capture every inner screen with the same
    screenshot command plus `--load-storage "$TMPDIR/sauce-intake-auth.json"`. If he does not want
-   to log in, those screens go to rung c.
+   to log in, those screens go to rung c. Delete the session file right after the last inner
+   screenshot, before anything else. If the run stops midway for any reason, tell the founder the
+   file's path and that it holds a logged-in session, so he deletes it himself.
 
 c. Write `sauce-intake/SCREENSHOTS-TODO.md` with the screens listed at the top of this part, one
    line each, leaving out any screen the app does not have. Tell the founder in the chat to capture them and drop them into
@@ -142,7 +155,7 @@ Write exactly this inside `./sauce-intake/`:
 
 ```
 sauce-intake/
-  PROOF-no-changes.txt
+  GIT-CHECK.txt
   customer.json
   REPORT.md
   brand/          copies of the logo files found, untouched
@@ -152,7 +165,8 @@ sauce-intake/
 
 ### customer.json
 
-English only. Keep the 13 top-level fields with these exact names. Write in plain sentences.
+English only. Keep the 13 text fields at the top with these exact names, followed by the four
+blocks `customer`, `product`, `funnel` and `sources`. Write in plain sentences.
 `purpose` is one of `reach`, `value`, `conversion`, taken from the founder's answer to question 8;
 never leave it empty and never guess it from the page. `website` is the public `https://` address or
 an empty string when there is no public site yet. Required: `name`, `whatItDoes`, `audience`,
@@ -236,6 +250,15 @@ Copy every logo file you found (svg, png, ico) into `sauce-intake/brand/`, byte 
 convert, resize or edit them. Copying is a read of the original and a write inside
 `sauce-intake/`, which is allowed.
 
+### The founder's confirmation, before the files are final
+
+Show the founder, in the chat, a short summary of what you are about to write: the product in one
+line, the audience, the problem, the differentiation, and every claim that will sit in `proof`.
+Each line says where it came from (the code, with the path, or his own answer). Ask him to correct
+anything and to confirm. Site copy can be old and a marketing line is not a decision: only what he
+confirms goes into `customer.json`. In `funnel`, anything you inferred rather than heard from him
+starts with the word `inferred:`.
+
 ### REPORT.md
 
 Short, for a person to read in a few minutes, in this order:
@@ -243,7 +266,7 @@ Short, for a person to read in a few minutes, in this order:
 1. What the product is, in three lines.
 2. The brand colours as hex, one per line with name and role.
 3. What was found in the code, with the file path for each fact.
-4. What the founder said.
+4. What the founder said, and what he corrected in the summary.
 5. Open questions: what could not be found.
 6. The screenshot list, and any screen skipped and why.
 7. Any step skipped because of the rule in part 1, and why.
@@ -254,8 +277,8 @@ Short, for a person to read in a few minutes, in this order:
    keys or tokens (`sk-`, `pk_`, `ghp_`, `eyJ`, `AKIA`, long random strings), passwords, real
    email addresses, phone numbers, and any file named like `*auth*` or `.env*`. Remove every hit
    and note it in `REPORT.md`. Only the founder's own public contact details may stay.
-2. Run the two proof commands again and append them under `AFTER` (part 2).
-3. Print the folder tree of `sauce-intake/`.
-4. Print the BEFORE and AFTER proof and say whether they are identical.
-5. End with this one sentence to the founder:
+3. Run the four git check commands again and append them under `AFTER` (part 2).
+4. Print the folder tree of `sauce-intake/`.
+5. Print the BEFORE and AFTER check and say whether they are identical.
+6. End with this one sentence to the founder:
    "Zip the `sauce-intake/` folder and send it to Sauce, then delete the folder."
