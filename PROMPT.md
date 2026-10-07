@@ -40,7 +40,7 @@ output to `sauce-intake/GIT-CHECK.txt` under the heading `BEFORE`:
 git status --porcelain
 git stash list
 git diff | shasum
-git ls-files --others --exclude-standard | grep -v "^sauce-intake/" | xargs shasum
+git ls-files --others --exclude-standard -z -- . ':!sauce-intake' | xargs -0 shasum
 ```
 
 The third line fingerprints the content of every changed tracked file, the fourth every untracked
@@ -101,9 +101,10 @@ its three purpose choices.
 
 The screens to capture, 5 to 8 in all: home or login, the main screen, the one screen where the
 product's value is seen, settings or pricing, the empty state, and one to three more that show a
-feature from part 3. If a cookie or consent banner covers the page, say so in `REPORT.md`.
+feature from part 3. Leave out any screen the app does not have; fewer than 5 is fine then. If a cookie or consent
+banner covers the page, say so in `REPORT.md`.
 
-Climb this ladder and stop at the first rung that works. A screenshot must end up as a file
+Do rung a and then rung b. Rung c is the fallback for whatever a and b could not reach. A screenshot must end up as a file
 inside `sauce-intake/screenshots/`; a picture you only see in your own browser tool does not count.
 
 a. Get the app running locally without changing anything: the local code is what the founder is
@@ -167,7 +168,7 @@ sauce-intake/
 
 English only. Keep the 13 text fields at the top with these exact names, followed by the four
 blocks `customer`, `product`, `funnel` and `sources`. Write in plain sentences.
-`purpose` is one of `reach`, `value`, `conversion`, taken from the founder's answer to question 8;
+`purpose` is one of `reach`, `value`, `conversion`, taken from the founder's answer to question 9;
 never leave it empty and never guess it from the page. `website` is the public `https://` address or
 an empty string when there is no public site yet. Required: `name`, `whatItDoes`, `audience`,
 `problem`, `differentiation`. If a field is unknown, write an empty string and list it under open questions
@@ -257,7 +258,9 @@ line, the audience, the problem, the differentiation, and every claim that will 
 Each line says where it came from (the code, with the path, or his own answer). Ask him to correct
 anything and to confirm. Site copy can be old and a marketing line is not a decision: only what he
 confirms goes into `customer.json`. In `funnel`, anything you inferred rather than heard from him
-starts with the word `inferred:`.
+starts with the word `inferred:`. A fact stated on the site carries its file path instead.
+Fields outside the summary (the next step, the voice, the colours, the features) are written as
+found in the code or as he answered them.
 
 ### REPORT.md
 
@@ -273,12 +276,13 @@ Short, for a person to read in a few minutes, in this order:
 
 ## 7. Finish line
 
-1. Scan `sauce-intake/` for anything that must not leave this computer: strings that look like
-   keys or tokens (`sk-`, `pk_`, `ghp_`, `eyJ`, `AKIA`, long random strings), passwords, real
-   email addresses, phone numbers, and any file named like `*auth*` or `.env*`. Remove every hit
-   and note it in `REPORT.md`. Only the founder's own public contact details may stay.
-3. Run the four git check commands again and append them under `AFTER` (part 2).
-4. Print the folder tree of `sauce-intake/`.
-5. Print the BEFORE and AFTER check and say whether they are identical.
-6. End with this one sentence to the founder:
+1. Scan `sauce-intake/` (every file except `GIT-CHECK.txt`, whose hashes are not secrets) for
+   anything that must not leave this computer: strings that look like keys or tokens (`sk-`,
+   `pk_`, `ghp_`, `eyJ`, `AKIA`, a long random string next to a word like key, token or secret),
+   passwords, real email addresses, phone numbers, and any file named like `*auth*` or `.env*`.
+   Remove every hit and note it in `REPORT.md`. Only the founder's own public contact details may stay.
+2. Run the four git check commands again and append them under `AFTER` (part 2).
+3. Print the folder tree of `sauce-intake/`.
+4. Print the BEFORE and AFTER check and say whether they are identical.
+5. End with this one sentence to the founder:
    "Zip the `sauce-intake/` folder and send it to Sauce, then delete the folder."
