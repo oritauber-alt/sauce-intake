@@ -12,8 +12,8 @@ an empty file `GIT-CHECK.txt` inside it (git does not list an empty folder).
 
 Two things are also allowed, because they are reads in effect: running the project's own dev script
 for the screenshots (part 5), which may write into its own ignored cache folders such as
-`node_modules/.vite/`, `.next/` or `.cache/`, and nothing else; and the one Playwright download of
-part 5 into the npm cache, after the founder said yes.
+`node_modules/.vite/`, `.next/` or `.cache/`, and nothing else; and, only for screens behind a
+login and only after the founder said yes, the one Playwright download of part 5 into the npm cache.
 
 Forbidden, with no exception:
 
@@ -117,23 +117,28 @@ a. Get the app running locally without changing anything: the local code is what
    Never install anything and never create an env file. If it cannot run this way, use the public
    URL only if the repo itself names one (README, package.json, a deploy config), else go to rung c.
 
-b. Capture each screen with Playwright driving the Chrome that is already on this computer. Ask
-   the founder once before the first run, then:
-   `npx --yes playwright@latest screenshot --channel chrome --full-page --viewport-size "1440,900" <url> sauce-intake/screenshots/<file>`
-   This downloads only the small Playwright package into the npm cache, not into the repo, and
-   needs no browser download. If there is no Chrome, try `--channel msedge`. If the command asks
-   to install browsers or anything else, do not install: go to rung c.
+b. Capture each public screen with the Chrome (or Edge) already on this computer, in headless
+   mode. Nothing is downloaded or installed for this. One command per screen:
+   macOS: `"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new --disable-gpu --hide-scrollbars --window-size=1440,900 --screenshot="<absolute path>/sauce-intake/screenshots/<file>" <url>`
+   Windows: `"C:\Program Files\Google\Chrome\Application\chrome.exe" --headless=new --disable-gpu --hide-scrollbars --window-size=1440,900 --screenshot="<absolute path>\sauce-intake\screenshots\<file>" <url>`
+   Linux: `google-chrome --headless=new --disable-gpu --hide-scrollbars --window-size=1440,900 --screenshot=... <url>`
+   For a long page, raise the window height (for example 1440,3000). The screenshot path must be
+   absolute. If no Chrome or Edge is installed, go to rung c.
 
-   Screens behind a login: never ask for, read or type a password. Instead open a browser window
-   for the founder and let him log in himself, once:
-   `npx --yes playwright@latest open --channel chrome --save-storage "$TMPDIR/sauce-intake-auth.json" <login url>`
-   Tell him: log in with a demo or test account if there is one, then close the window. The file
-   saves his logged-in session, like a browser that stays signed in; it lives outside the project
-   and is never copied into `sauce-intake/`. Then capture every inner screen with the same
-   screenshot command plus `--load-storage "$TMPDIR/sauce-intake-auth.json"`. If he does not want
-   to log in, those screens go to rung c. Delete the session file right after the last inner
-   screenshot, before anything else. If the run stops midway for any reason, tell the founder the
-   file's path and that it holds a logged-in session, so he deletes it himself.
+   Screens behind a login: Chrome headless cannot log in. Never ask for, read or type a password.
+   Offer the founder the choice:
+   - He captures those screens himself (rung c for them), or
+   - once, with his yes, use Playwright with the same Chrome: it downloads only the small
+     Playwright package into the npm cache, not into the repo, and no browser. Open a window for
+     him to log in himself: `npx --yes playwright@latest open --channel chrome --save-storage "$TMPDIR/sauce-intake-auth.json" <login url>`
+     Tell him: log in with a demo or test account if there is one, then close the window. The
+     file saves his logged-in session, like a browser that stays signed in; it lives outside the
+     project and is never copied into `sauce-intake/`. Then capture every inner screen with
+     `npx --yes playwright@latest screenshot --channel chrome --full-page --viewport-size "1440,900" --load-storage "$TMPDIR/sauce-intake-auth.json" <url> sauce-intake/screenshots/<file>`.
+     If Playwright asks to install browsers or anything else, do not install: those screens go to
+     rung c. Delete the session file right after the last inner screenshot, before anything else.
+     If the run stops midway for any reason, tell the founder the file's path and that it holds
+     a logged-in session, so he deletes it himself.
 
 c. Write `sauce-intake/SCREENSHOTS-TODO.md` with the screens listed at the top of this part, one
    line each, leaving out any screen the app does not have. Tell the founder in the chat to capture them and drop them into
